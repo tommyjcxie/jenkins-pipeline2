@@ -17,7 +17,8 @@ pipeline {
                       cleanWs()
                         dir("terraform")
                         {
-                            git "https://github.com/tommyjcxie/jenkins-pipeline2.git"
+                            git branch: 'main', 
+                              url: 'https://github.com/tommyjcxie/jenkins-pipeline2'
                         }
                     }
                 }
