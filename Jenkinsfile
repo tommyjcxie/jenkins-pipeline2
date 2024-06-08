@@ -14,6 +14,7 @@ pipeline {
         stage('checkout') {
             steps {
                  script{
+                      cleanWs()
                         dir("terraform")
                         {
                             git "https://github.com/tommyjcxie/jenkins-pipeline2.git"
