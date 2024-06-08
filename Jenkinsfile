@@ -12,10 +12,7 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-                 script{
-                       
-                    echo "hello world"
-                }
+                 echo 'Hello world'
             }
 
         
