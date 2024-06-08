@@ -13,7 +13,6 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-                 cleanWs()
                  script{
                         dir("terraform")
                         {
