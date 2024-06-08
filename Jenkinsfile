@@ -25,7 +25,10 @@ pipeline {
         stage('Plan') {
             steps {
                 sh 'pwd;cd terraform/ ; terraform init'
+                // This command generates an execution plan and saves it to a file named tfplan
                 sh "pwd;cd terraform/ ; terraform plan -out tfplan"
+                
+                //displays the contents of the saved plan (tfplan) and redirects the output to a file named tfplan.txt
                 sh 'pwd;cd terraform/ ; terraform show -no-color tfplan > tfplan.txt'
             }
         }
