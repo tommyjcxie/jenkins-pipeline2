@@ -17,7 +17,7 @@ pipeline {
                       cleanWs()
                         dir("terraform")
                         {
-                            git "https://github.com/tommyjcxie/jenkins-pipeline2.git"
+                            git "https://github.com/yeshwanthlm/Terraform-Jenkins.git"
                         }
                     }
                 }
