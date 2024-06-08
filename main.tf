@@ -1,11 +1,13 @@
 provider "aws" {
-    region = "us-east-2"  
+  region = "us-east-2"
 }
 
-resource "aws_instance" "wordpress_instances" {
-  ami           = "ami-05fa00d4c63e32376" # us-west-2
+# Create a new EC2 instance
+resource "aws_instance" "example" {
+  ami           = "ami-0fb653ca2d3203ac1" # Amazon Linux 2 AMI in us-east-2
   instance_type = "t2.micro"
+
   tags = {
-      Name = "TF-Instance"
+    Name = "Tommy-Jenkins"
   }
 }
