@@ -18,11 +18,6 @@
         name: php-mysqli
         state: present
 
-    - name: Install MariaDB 10.5
-      yum:
-        name: mariadb105
-        state: present
-
     - name: Start and enable Apache
       service:
         name: httpd
