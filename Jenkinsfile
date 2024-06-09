@@ -3,6 +3,7 @@ pipeline {
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        SSH_KEY               = credentials('ansible-key') // Use the ID of the SSH key credential
     }
 
    agent  any
@@ -27,7 +28,24 @@ pipeline {
                 sh 'terraform apply -input=false tfplan'
             }
         }
-  
-    }
 
-  }
+        stage('Setup Ansible Inventory') {
+            steps {
+                script {
+                    writeFile file: 'inventory', text: '''
+                    [web]
+                    ec2-instance ansible_host=13.58.73.5 ansible_user=ec2-user ansible_ssh_private_key_file=${SSH_KEY}
+                    '''
+                }
+            }
+        }
+
+        stage('Run Ansible Playbook') {
+            steps {
+                 withEnv(["ANSIBLE_HOST_KEY_CHECKING=False"]) {
+                    sh 'ansible-playbook -i inventory install_wordpress.yml'
+                }
+            }
+        }
+    }
+}
