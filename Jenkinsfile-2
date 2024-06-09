@@ -19,7 +19,7 @@ pipeline {
                 script {
                     writeFile file: 'inventory', text: '''
                     [web]
-                    ec2-instance ansible_host=3.141.43.64 ansible_user=ec2-user ansible_ssh_private_key_file=${SSH_KEY}
+                    ec2-instance ansible_host=13.58.73.5 ansible_user=ec2-user ansible_ssh_private_key_file=${SSH_KEY}
                     '''
                 }
             }
