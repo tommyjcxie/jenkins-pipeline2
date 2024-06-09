@@ -24,6 +24,11 @@
         state: started
         enabled: yes
 
+    - name: Install MariaDB 10.5
+      yum:
+        name: mariadb105
+        state: present
+
     - name: Start and enable PHP-FPM
       service:
         name: php-fpm
