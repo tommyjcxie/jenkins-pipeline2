@@ -26,10 +26,7 @@ pipeline {
             steps {
                 sh 'terraform init'
                 // This command generates an execution plan and saves it to a file named tfplan
-                sh "terraform plan -out tfplan"
-                
-                //displays the contents of the saved plan (tfplan) and redirects the output to a file named tfplan.txt
-                sh 'terraform show -no-color tfplan > tfplan.txt'
+                sh "terraform plan"
             }
         }
         stage('Approval') {
@@ -41,8 +38,6 @@ pipeline {
 
            steps {
                script {
-                    def plan = readFile 'terraform/tfplan.txt'
-                    input message: "Do you want to apply the plan?",
                     parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
                }
            }
