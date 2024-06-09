@@ -32,13 +32,6 @@ pipeline {
                 sh "terraform apply -input=false tfplan"
             }
         }
-
-        stage('ansible-execute') {
-            steps {
-                // execute ansible playbook
-                // ansiblePlaybook playbook: 'create-EC2.yml'
-            }
-        }
     }
 
   }
