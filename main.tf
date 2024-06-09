@@ -143,7 +143,7 @@ resource "aws_autoscaling_group" "terraform-asg" {
   desired_capacity     = 1  
   max_size             = 3
   min_size             = 1
-  subnets            = ["subnet-0dbbac279d1703f37", "subnet-041ff5d291aa144d7"] # Public subnets in NASDAQ VPC
+  vpc_zone_identifier  = ["subnet-0dbbac279d1703f37", "subnet-041ff5d291aa144d7"] # Public subnets in NASDAQ VPC
   launch_template {
     id      = aws_launch_template.launch-template.id
     version = "$Latest"
