@@ -24,37 +24,15 @@ pipeline {
                 }
             }
 
-        stage('Plan') {
+          stage('execute') {
             steps {
-                sh 'pwd;cd terraform/ ; terraform init'
-                // This command generates an execution plan and saves it to a file named tfplan
-                sh "pwd;cd terraform/ ; terraform plan -out tfplan"
-                
-                //displays the contents of the saved plan (tfplan) and redirects the output to a file named tfplan.txt
-                sh 'pwd;cd terraform/ ; terraform show -no-color tfplan > tfplan.txt'
-            }
-        }
-        stage('Approval') {
-           when {
-               not {
-                   equals expected: true, actual: params.autoApprove
-               }
-           }
-
-           steps {
-               script {
-                    def plan = readFile 'terraform/tfplan.txt'
-                    input message: "Do you want to apply the plan?",
-                    parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
-               }
-           }
-       }
-
-        stage('Apply') {
-            steps {
-                sh "pwd;cd terraform/ ; terraform apply -input=false tfplan"
+                //to suppress warnings when you execute playbook    
+                sh "pip install --upgrade requests==2.20.1"
+                // execute ansible playbook
+                ansiblePlaybook playbook: 'create-EC2.yml'
             }
         }
     }
+}
 
-  }
+       
