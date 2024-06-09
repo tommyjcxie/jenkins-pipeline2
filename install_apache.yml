@@ -1,19 +1,20 @@
 ---
-- name: Install Apache on EC2
-  hosts: all
+- name: Install Apache on Amazon Linux
+  hosts: web
   become: yes
   tasks:
-    - name: Update apt cache
-      apt:
-        update_cache: yes
+    - name: Update yum cache
+      yum:
+        name: '*'
+        state: latest
 
     - name: Install Apache
-      apt:
-        name: apache2
+      yum:
+        name: httpd
         state: present
 
     - name: Ensure Apache is running
       service:
-        name: apache2
+        name: httpd
         state: started
         enabled: yes
