@@ -44,7 +44,7 @@ pipeline {
             }
         }
 
-            /*
+
         stage('Setup Ansible Inventory') {
             steps {
                 script {
@@ -63,6 +63,6 @@ pipeline {
                 }
             }
         }
-        */
+        
     }
 }
