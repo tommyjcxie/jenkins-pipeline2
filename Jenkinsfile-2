@@ -28,7 +28,7 @@ pipeline {
         stage('Run Ansible Playbook') {
             steps {
                  withEnv(["ANSIBLE_HOST_KEY_CHECKING=False"]) {
-                    sh 'ansible-playbook -i inventory install_apache.yml'
+                    sh 'ansible-playbook -i inventory install_wordpress.yml'
                 }
             }
         }
