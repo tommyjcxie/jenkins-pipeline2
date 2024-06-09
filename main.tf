@@ -35,7 +35,7 @@ resource "aws_security_group" "allow_web_traffic" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "-1" # specify that the rule applies to all IP protocols. This means that the rule will allow or deny traffic for all types of protocols, including TCP, UDP, ICMP, and others.
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
