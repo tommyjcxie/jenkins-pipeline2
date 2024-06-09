@@ -4,7 +4,7 @@ provider "aws" {
 
 # Data source to fetch the existing Elastic IP
 data "aws_eip" "existing_eip" {
-  public_ip = "13.58.73.5" # Replace with your existing Elastic IP
+  public_ip = "13.58.73.5" # Use elastic IP from aws
 }
 
 resource "aws_security_group" "allow_web_traffic" {
