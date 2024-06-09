@@ -1,20 +1,26 @@
 ---
-- name: Install WordPress on Amazon Linux
+- name: Install WordPress on Amazon Linux 2
   hosts: web
   become: yes
-  vars:
-    wp_url: "https://wordpress.org/latest.tar.gz"
-    wp_dir: "/var/www/html"
-
   tasks:
     - name: Update all packages
       yum:
         name: "*"
         state: latest
 
-    - name: Install Apache
+    - name: Install PHP
       yum:
-        name: httpd
+        name: php
+        state: present
+
+    - name: Install PHP MySQLi extension
+      yum:
+        name: php-mysqli
+        state: present
+
+    - name: Install MariaDB 10.5
+      yum:
+        name: mariadb105
         state: present
 
     - name: Start and enable Apache
@@ -23,53 +29,55 @@
         state: started
         enabled: yes
 
-    - name: Install PHP and required extensions
-      yum:
-        name:
-          - php
-          - php-mysqlnd
-          - php-fpm
-          - php-json
-          - php-mbstring
-          - php-xml
-        state: present
+    - name: Start and enable PHP-FPM
+      service:
+        name: php-fpm
+        state: started
+        enabled: yes
+
+    - name: Add ec2-user to apache group
+      user:
+        name: ec2-user
+        groups: apache
+        append: yes
+
+    - name: Change ownership of /var/www/html to ec2-user:apache
+      file:
+        path: /var/www/html
+        owner: ec2-user
+        group: apache
+        recurse: yes
+
+    - name: Change ownership of /var/www/html to apache:apache
+      file:
+        path: /var/www/html
+        owner: apache
+        group: apache
+        recurse: yes
 
     - name: Download WordPress
       get_url:
-        url: "{{ wp_url }}"
-        dest: /tmp/wordpress.tar.gz
+        url: https://wordpress.org/latest.zip
+        dest: /tmp/latest.zip
 
-    - name: Extract WordPress
+    - name: Unzip WordPress
       unarchive:
-        src: /tmp/wordpress.tar.gz
-        dest: "{{ wp_dir }}"
+        src: /tmp/latest.zip
+        dest: /tmp
         remote_src: yes
-        creates: "{{ wp_dir }}/wordpress"
 
-    - name: Move WordPress files to web root
-      command: mv {{ wp_dir }}/wordpress/* {{ wp_dir }}/
+    - name: Copy WordPress files to /var/www/html
+      command: cp -R /tmp/wordpress/* /var/www/html/
 
-    - name: Set permissions for WordPress
+    - name: Set permissions for WordPress files
       file:
-        path: "{{ wp_dir }}"
-        state: directory
+        path: /var/www/html
         owner: apache
         group: apache
         mode: '0755'
         recurse: yes
 
-    - name: Remove default Apache welcome page
-      file:
-        path: /etc/httpd/conf.d/welcome.conf
-        state: absent
-
     - name: Restart Apache
-      service:
-        name: httpd
-        state: restarted
-
-  handlers:
-    - name: restart apache
       service:
         name: httpd
         state: restarted
