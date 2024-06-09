@@ -18,7 +18,7 @@ pipeline {
                 }
             }
 
-        stage('Plan') {
+        stage('Terraform') {
             steps {
                 sh 'terraform init'
                 // Generate the execution plan and save it to a file named tfplan
