@@ -23,46 +23,11 @@ pipeline {
             steps {
                 sh 'terraform init'
                 // Generate the execution plan and save it to a file named tfplan
-                sh 'terraform plan -out=tfplan'
+                sh 'terraform destory'
             }
         }
 
-        stage('Approval') {
-            steps {
-                script {
-                    def plan = readFile 'tfplan'
-                    input message: "Do you want to apply the Terraform plan?",
-                          parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
-                }
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
-                // Apply the plan immediately
-                sh 'terraform apply -input=false tfplan'
-            }
-        }
-
-
-        stage('Setup Ansible Inventory') {
-            steps {
-                script {
-                    writeFile file: 'inventory', text: '''
-                    [web]
-                    ec2-instance ansible_host=13.58.73.5 ansible_user=ec2-user ansible_ssh_private_key_file=${SSH_KEY}
-                    '''
-                }
-            }
-        }
-
-        stage('Run Ansible Playbook') {
-            steps {
-                 withEnv(["ANSIBLE_HOST_KEY_CHECKING=False"]) {
-                    sh 'ansible-playbook -i inventory install_wordpress.yml'
-                }
-            }
-        }
+    
         
     }
 }
