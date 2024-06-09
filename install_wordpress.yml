@@ -71,4 +71,17 @@
       command: cp -R /tmp/wordpress/. /var/www/html/
       args:
         removes: /tmp/wordpress
+
+    - name: Set permissions for WordPress files
+      file:
+        path: /var/www/html
+        owner: apache
+        group: apache
+        mode: '0755'
+        recurse: yes
+
+    - name: Restart Apache
+      service:
+        name: httpd
+        state: restarted
    
