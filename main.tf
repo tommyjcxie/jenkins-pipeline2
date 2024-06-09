@@ -42,7 +42,7 @@ resource "aws_security_group" "allow_web_traffic" {
 
 # Create a new EC2 instance
 resource "aws_instance" "example" {
-  ami           = "ami-0c9921088121ad00b" # Amazon Linux 2 AMI in us-east-2
+  ami           = "ami-0ca2e925753ca2fb4" # Amazon Linux AMI in us-east-2
   instance_type = "t2.micro"
   key_name      = "ansible-kp"
   vpc_security_group_ids = [aws_security_group.allow_web_traffic.id] # Associate the security group
