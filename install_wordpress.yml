@@ -46,14 +46,22 @@
         remote_src: yes
         creates: "{{ wp_dir }}/wordpress"
 
+    - name: Move WordPress files to web root
+      command: mv {{ wp_dir }}/wordpress/* {{ wp_dir }}/
+
     - name: Set permissions for WordPress
       file:
-        path: "{{ wp_dir }}/wordpress"
+        path: "{{ wp_dir }}"
         state: directory
         owner: apache
         group: apache
         mode: '0755'
         recurse: yes
+
+    - name: Remove default Apache welcome page
+      file:
+        path: /etc/httpd/conf.d/welcome.conf
+        state: absent
 
     - name: Restart Apache
       service:
