@@ -1,0 +1,67 @@
+---
+- name: Install WordPress on Amazon Linux
+  hosts: web
+  become: yes
+  vars:
+    wp_url: "https://wordpress.org/latest.tar.gz"
+    wp_dir: "/var/www/html"
+
+  tasks:
+    - name: Update all packages
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: present
+
+    - name: Start and enable Apache
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Install PHP and required extensions
+      yum:
+        name:
+          - php
+          - php-mysqlnd
+          - php-fpm
+          - php-json
+          - php-mbstring
+          - php-xml
+        state: present
+
+    - name: Download WordPress
+      get_url:
+        url: "{{ wp_url }}"
+        dest: /tmp/wordpress.tar.gz
+
+    - name: Extract WordPress
+      unarchive:
+        src: /tmp/wordpress.tar.gz
+        dest: "{{ wp_dir }}"
+        remote_src: yes
+        creates: "{{ wp_dir }}/wordpress"
+
+    - name: Set permissions for WordPress
+      file:
+        path: "{{ wp_dir }}/wordpress"
+        state: directory
+        owner: apache
+        group: apache
+        mode: '0755'
+        recurse: yes
+
+    - name: Restart Apache
+      service:
+        name: httpd
+        state: restarted
+
+  handlers:
+    - name: restart apache
+      service:
+        name: httpd
+        state: restarted
