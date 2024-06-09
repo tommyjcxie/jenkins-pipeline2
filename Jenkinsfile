@@ -24,12 +24,12 @@ pipeline {
 
         stage('Plan') {
             steps {
-                sh 'pwd;cd terraform/ ; terraform init'
+                sh 'terraform init'
                 // This command generates an execution plan and saves it to a file named tfplan
-                sh "pwd;cd terraform/ ; terraform plan -out tfplan"
+                sh "terraform plan -out tfplan"
                 
                 //displays the contents of the saved plan (tfplan) and redirects the output to a file named tfplan.txt
-                sh 'pwd;cd terraform/ ; terraform show -no-color tfplan > tfplan.txt'
+                sh 'terraform show -no-color tfplan > tfplan.txt'
             }
         }
         stage('Approval') {
@@ -50,7 +50,7 @@ pipeline {
 
         stage('Apply') {
             steps {
-                sh "pwd;cd terraform/ ; terraform apply -input=false tfplan"
+                sh "terraform apply -input=false tfplan"
             }
         }
 
