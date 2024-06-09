@@ -26,8 +26,6 @@ pipeline {
 
           stage('execute') {
             steps {
-                //to suppress warnings when you execute playbook    
-                sh "pip install --upgrade requests==2.20.1"
                 // execute ansible playbook
                 ansiblePlaybook playbook: 'create-EC2.yml'
             }
