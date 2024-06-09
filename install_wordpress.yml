@@ -67,4 +67,7 @@
         remote_src: yes
         creates: /tmp/wordpress
 
+    - name: Copy WordPress files to /var/www/html
+      command: cp -R /tmp/wordpress/* /var/www/html/
+
    
