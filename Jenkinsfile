@@ -21,17 +21,13 @@ pipeline {
         stage('Plan') {
             steps {
                 sh 'terraform init'
-                // This command generates an execution plan and saves it to a file named tfplan
-                sh "terraform plan"
+                // Generate the execution plan and save it to a file named tfplan
+                sh 'terraform plan -out=tfplan'
+                // Apply the plan immediately
+                sh 'terraform apply -input=false tfplan'
             }
         }
   
-
-        stage('Apply') {
-            steps {
-                sh "terraform apply -input=false tfplan"
-            }
-        }
     }
 
   }
