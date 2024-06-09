@@ -19,11 +19,26 @@ pipeline {
                 }
             }
 
-        stage('Terraform') {
+        stage('Terraform Init and Plan') {
             steps {
                 sh 'terraform init'
                 // Generate the execution plan and save it to a file named tfplan
                 sh 'terraform plan -out=tfplan'
+            }
+        }
+
+        stage('Approval') {
+            steps {
+                script {
+                    def plan = readFile 'tfplan'
+                    input message: "Do you want to apply the Terraform plan?",
+                          parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
+                }
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
                 // Apply the plan immediately
                 sh 'terraform apply -input=false tfplan'
             }
