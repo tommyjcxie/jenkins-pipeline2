@@ -35,26 +35,6 @@
         state: started
         enabled: yes
 
-    - name: Add ec2-user to apache group
-      user:
-        name: ec2-user
-        groups: apache
-        append: yes
-
-    - name: Change ownership of /var/www/html to ec2-user:apache
-      file:
-        path: /var/www/html
-        owner: ec2-user
-        group: apache
-        recurse: yes
-
-    - name: Change ownership of /var/www/html to apache:apache
-      file:
-        path: /var/www/html
-        owner: apache
-        group: apache
-        recurse: yes
-
     - name: Download WordPress
       get_url:
         url: https://wordpress.org/latest.zip
