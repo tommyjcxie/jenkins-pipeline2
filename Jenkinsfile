@@ -41,6 +41,7 @@ pipeline {
             steps {
                 // Apply the plan immediately
                 sh 'terraform apply -input=false tfplan'
+                sleep(time: 10, unit: 'SECONDS') // to allow instance to be ready
             }
         }
 
